@@ -1,1 +1,59 @@
 /* You can add global styles to this file, and also import other style files */
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+
+input{
+    background-color: var(--mainBaseColor) !important;
+    font-weight: bold;
+    cursor: pointer;
+    color: black !important;
+}
+
+
+input[type="submit"]{
+    background-color: var(--mainColor) !important;
+    color: black !important;
+    border: solid 1px var(--fourthColor);
+    border-radius: 30px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+:root{
+    --mainBaseColor:rgb(253, 252, 233);
+    --secondaryBaseColor: #e5e5e5;    
+    --mainColor: rgb(222, 232, 126);
+    --secondaryColor:rgb(242, 211, 149);
+    --secondaryColor2:rgb(248, 231, 191);
+    --thirdColor:rgb(255, 225, 216);
+    --thirdColor2:rgb(254, 240, 225);
+    --fourthColor:rgb(195, 210, 245);
+    --fourthColor2:rgb(224, 231, 239);
+    --textcolor:#e4e4e4;
+
+
+
+
+}
+
+body{
+    background-color: var(--fourthColor);
+}
+
+.container{
+    display: flex;
+    width: 100%;
+}
+
+.wrapper{
+    display: flex;
+    max-width: 1920px;
+    width: 100%;
+    margin: 0 auto;
+}
+
