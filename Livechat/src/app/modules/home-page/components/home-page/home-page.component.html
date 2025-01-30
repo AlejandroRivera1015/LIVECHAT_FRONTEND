@@ -1,0 +1,26 @@
+<div class="container">
+    <div class="wrapper loginWrapper">
+    
+        <div class="loginContainer">
+            <div class="loginStatus">
+    
+                <span class="boldText loginMessage">{{loginMessage}}</span>
+            <!-- TODO MESSAGES -->
+            </div>
+    
+            <div class="loginFormContainer">
+    
+                <form [formGroup]="loginForm" (ngSubmit)="loginformSubmit()">
+                    <input type="text" formControlName="email" >
+                    <input type="password" formControlName="password" >
+                    <input type="submit" [disabled]="loginForm.invalid" >
+    
+                </form>
+    
+            </div>
+            
+        </div>
+    
+    
+    </div>
+    </div>
