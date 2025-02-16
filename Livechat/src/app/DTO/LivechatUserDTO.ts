@@ -1,19 +1,21 @@
 export class LivechatUserDTO{
 
-    private id : Number =  0;
-    private token : String = "";
+    private id : number =  0;
+    private token : string = "";
 
 
-    constructor(id : Number, token : String){
+    constructor(id : number, token : string){
         this.id = id;
         this.token = token;
     }
 
-    getId():Number{
+    public getId():Number{
         return this.id;
     }
-    getToken():String{
+    public getToken():String{
         return this.token;
     }
+
 }
+
 
