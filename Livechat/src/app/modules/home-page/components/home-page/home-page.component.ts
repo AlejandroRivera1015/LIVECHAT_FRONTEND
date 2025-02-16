@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { LivechatUserService } from '../../../../services/livechat-user.service';
 import { LivechatUserDTO } from '../../../../DTO/LivechatUserDTO';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home-page',
@@ -15,23 +16,17 @@ export class HomePageComponent implements OnInit {
   public loginMessage : String = ""; 
   private flag : boolean = false;
 
-  private userName : String = ""
-  private userPassword : String = "";
-
-
-
 
   loginForm = new FormGroup({
     email : new FormControl(''),
     password : new FormControl('' ,[Validators.required])
   });
 
-  constructor(private livechatUserService : LivechatUserService) {
-
-  }
+  constructor(private livechatUserService : LivechatUserService, private router : Router) {}
 
 
   handleloginMessage():void{
+
 
     let tempMessage : String  = "" ;
     this.loginMessage = "";
@@ -49,26 +44,43 @@ export class HomePageComponent implements OnInit {
 
   }
 
-  loginformSubmit():void{
-    console.log('form');
-    
+
+  
+  loginformSubmit(){
 
     try {
-      this.livechatUserService.requestCredentials(this.loginForm.value);
-      
+            
+        this.livechatUserService.requestCredentials(this.loginForm.value).subscribe((response)=>{
+          console.log("la resp del server " + JSON.stringify(response));
 
-    } catch (error) {
-      console.error(error);
-      
+          if(response.getToken() != ""){
+            console.log("vamos a ruta");
+            
+            this.router.navigate(['/app']);
+          }
+          else{
+            this.router.navigate(['/login']);
 
-      
+          }
+
+        
+          
+
+      });
     }
-    this.handleloginMessage();
-  }
+      
+    catch (error) {
+      console.error(error);      
+    }
+
+
+
+      
+}
+
 
 
   ngOnInit(): void {
     this.handleloginMessage();
-      
   }
 }
