@@ -1,22 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ChatDisplayComponent } from './components/chat-display/chat-display.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { HomePageComponent } from './components/home-page/home-page.component';
 import { LivechatUserService } from '../../services/livechat-user.service';
 import { AuthGuard } from '../../Config/auth/auth-guard.guard';
 
-
 export const routes: Routes = [{
   path: '',
-  component: HomePageComponent
-
-
+  component: ChatDisplayComponent
 }]
 
+
 @NgModule({
-  declarations: [HomePageComponent],
-  imports: [CommonModule,ReactiveFormsModule,HttpClientModule,RouterModule.forChild(routes)]
+  declarations: [ChatDisplayComponent],
+  imports: [
+    CommonModule,RouterModule.forChild(routes),HttpClientModule]
+
 })
-export class HomePageModule { }
+export class ChatPageModule { }
