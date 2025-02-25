@@ -16,11 +16,16 @@ export class AuthGuard implements CanActivate{
       console.log("guard active");    
      return this.livechatService.getUserCredentials().pipe(
         map((livechatUser: LivechatUserDTO)=>{
-          console.log("el dto es " + livechatUser);
-          return true;
-          
-          
-        }));
+
+          if(livechatUser.getToken() == ""){
+            this.router.navigate(['/login']);
+            return false;
+          }
+          else{
+            return true;
+          }
+      }
+      ));
       
 
      
