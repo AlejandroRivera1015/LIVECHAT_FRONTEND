@@ -1,32 +1,34 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { LivechatUserService } from '../../../../services/livechat-user.service';
-import { LivechatUserDTO } from '../../../../DTO/LivechatUserDTO';
-import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { LivechatUserDTO } from '../../../../DTO/LivechatUserDTO';
+import { filter, map, Observable, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-home-page',
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.css'
 })
-export class HomePageComponent implements OnInit {
+export class HomePageComponent implements OnInit , OnDestroy {
 
   public loginMessage : String = ""; 
   private flag : boolean = false;
 
+  private  livechatUserServiceObservable : Observable<LivechatUserDTO> = new Observable<LivechatUserDTO>();
 
   loginForm = new FormGroup({
     email : new FormControl(''),
     password : new FormControl('' ,[Validators.required])
   });
 
+  private destroy$ = new Subject<void>();
+
   constructor(private livechatUserService : LivechatUserService, private router : Router) {}
 
 
   handleloginMessage():void{
-
 
     let tempMessage : String  = "" ;
     this.loginMessage = "";
@@ -49,38 +51,38 @@ export class HomePageComponent implements OnInit {
   loginformSubmit(){
 
     try {
+
+      this.livechatUserService.requestCredentials(this.loginForm.value).pipe(
+        takeUntil(this.destroy$))
+          .subscribe(
+              ((livechatUser : LivechatUserDTO) => {
+                if(livechatUser.getToken() == ""){
+                  this.router.navigate(['/login']);
+                }
+                else{
+                  this.router.navigate(['/app']);
+                }
+              })
             
-        this.livechatUserService.requestCredentials(this.loginForm.value).subscribe((response)=>{
-          console.log("la resp del server " + JSON.stringify(response));
-
-          if(response.getToken() != ""){
-            console.log("vamos a ruta");
-            
-            this.router.navigate(['/app']);
-          }
-          else{
-            this.router.navigate(['/login']);
-
-          }
-
+            );
         
-          
-
-      });
     }
-      
     catch (error) {
       console.error(error);      
-    }
-
-
-
-      
+    }      
 }
-
 
 
   ngOnInit(): void {
     this.handleloginMessage();
   }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+
+
+
+
 }
