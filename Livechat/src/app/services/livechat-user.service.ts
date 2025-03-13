@@ -10,24 +10,21 @@ export class LivechatUserService {
 
 
   private livechatUserCredentials = new BehaviorSubject<LivechatUserDTO>(new LivechatUserDTO(1, ""));
-  private livechatUserCredentials$ = this.livechatUserCredentials.asObservable();
-
 
   constructor(private httpClient: HttpClient) { }
 
-
+  
   public requestCredentials(credentials: any): Observable<LivechatUserDTO> {
 
-    const credentialsResponse = new BehaviorSubject<LivechatUserDTO>(new LivechatUserDTO(0, ""));credentials
+    const credentialsResponse = new BehaviorSubject<LivechatUserDTO>(new LivechatUserDTO(0, ""));
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer empty',
-   
+      'Authorization': 'Bearer x.y.z',   
     })
 
     try {
-      this.httpClient.post('http://localhost:8080/auth/login', credentials, { observe: "response", headers: headers })
+      this.httpClient.post('http://localhost:8080/auth/login', credentials, { observe: "response", headers: headers, withCredentials: true })
         .subscribe((response: HttpResponse<any>) => {
 
           if (response.status == 200) {
@@ -42,6 +39,8 @@ export class LivechatUserService {
         });
 
     } catch (error) {
+      console.log("error" + error);
+      
 
     }
     return credentialsResponse.asObservable();
@@ -54,8 +53,8 @@ export class LivechatUserService {
     this.livechatUserCredentials.next(livechatuser);
   }
 
-  public getUserCredentials(): Observable<LivechatUserDTO> {
-    return this.livechatUserCredentials$;
+  public getUserCredentials(): any {
+    return this.livechatUserCredentials.asObservable();
   }
 
 

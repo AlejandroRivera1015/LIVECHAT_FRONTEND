@@ -1,0 +1,16 @@
+<form [formGroup] = "searchContactForm"  (ngSubmit)="searchContact()"> 
+<input type="email" formControlName="email">
+<input type="submit" [disabled]="searchContactForm.invalid" >
+</form>
+
+
+<div class="userResult">
+    <div>
+        <span *ngIf ="(contactSearch | async) as contact">
+            <span *ngIf ="contact && contact.userId !== 0">{{contact?.userName}} {{contact?.userId}}</span>
+            <button (click) = "getContactConversation(contact.userId)" *ngIf ="contact && contact.userId !== 0">New Conversation</button>
+        </span>
+
+    </div>
+
+</div>
