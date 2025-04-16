@@ -9,47 +9,60 @@ import { LivechatUserDTO } from '../../DTO/LivechatUserDTO';
 @Injectable({
   providedIn: 'root'
 })
-export class ConversationsServicesService {
 
+export class ConversationsServicesService  {
 
   private userId : number = 0;
-
   private conversations = new BehaviorSubject<any>([]);
-  wsSocket = new WebSocket('ws://localhost:8080/livechat');
+  public actualConversation = new BehaviorSubject<number>(0);
+  public actualContact = new BehaviorSubject<number>(0);
+  public wsSocket = new WebSocket('ws://localhost:8080/livechat');
+
+
   
+  constructor(private httpClient : HttpClient, private livechatUserService : LivechatUserService) {}
 
-  constructor(private httpClient : HttpClient, private livechatUserService : LivechatUserService, private livechatUserServices: LivechatUserService) {}
-
-  public setConnetion(): Observable<any> {
-    console.log("Setting connection");
+  public setConnetion(): Observable<number> {
+      console.log("Setting connection");
         return this.livechatUserService.getUserCredentials().pipe(
           map((response : any) =>{
             this.userId = response.id;
-            return(this.userId);
+            return response.id;
+    
           }
         ));
+        
   } 
 
-
-  public getAllConversations(userId: string): void {
-    this.httpClient.get<any>(`http://localhost:8080/conversations/all?userId=${userId}`,{observe: "response", withCredentials : true}).pipe(
-      filter((response: HttpResponse<any>)=>{
-        console.log("response: " + response.body);
-        
-        return response.body ;
-      })
-    ).subscribe();
+  public getUserId(): number {
+    return this.userId;
   }
 
-  public getConversationById (contactId : number){
+  public setAllConversations(userId: string): void {
+    
+    this.httpClient.get<any>(`http://localhost:8080/conversations/all?userId=${userId}`,{observe: "response", withCredentials : true}).subscribe((response: HttpResponse<any>) => {
+      console.log("Conversations response: " + JSON.stringify(response.body));
+      this.conversations.next(response.body);
+      
+    });
+  }
 
-    let params = {
-      user: this.userId,  
-      contactId :contactId
+    public getAllConversations(): Observable<any> {
+      return this.conversations.asObservable();
     }
 
+public getConversationById (contactId : number){
+    let ConversationRequestDTO = {
+        responseType: "GET_CONVERSATIONS",
+        participants: [this.userId, contactId]
+    }
     console.log("Getting conversation with id: " + contactId);
-    this.wsSocket.send("hola broo" + JSON.stringify(params));
+    this.wsSocket.send(JSON.stringify(ConversationRequestDTO));
+  }
+
+  //TODO: implement this function
+  public updateConversation(){
+
   }
 
 }
