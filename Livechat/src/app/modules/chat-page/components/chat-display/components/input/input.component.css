@@ -1,0 +1,7 @@
+.input-container form button{color: var(--mainColor) !important; background-color: var(--thirdColor);}
+.input-container{display: flex; position: absolute; bottom: 0; width: 100%;}
+.input-container form{width: 100%; display:  flex; justify-content: space-around;}
+
+.input-container form input{width: 87%; height: 30px; color: var(--mainColor) !important; font-size: 20px; background-color: var(--thirdColor) !important;}
+
+.input-container form button{width: 10%; height: 30px;}

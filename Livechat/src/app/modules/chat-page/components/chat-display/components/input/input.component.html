@@ -1,0 +1,6 @@
+<div class="input-container">
+    <form [formGroup]="sendMessage" (ngSubmit)="handleSendMessage()">
+        <input (click)="handleContact()" type="text" formControlName="message">
+        <button class="sendMessageInput">Send Message</button>
+    </form>
+</div>
