@@ -6,14 +6,16 @@ export class MessageDTO{
     private message : string = "";
     private sender : number = 0;
     private receiver : number = 0;
+    private createAt: string = "";
 
 
 
-    constructor(id : number, message : string, sender: number, receiver : number){
+    constructor(id : number, message : string, sender: number, receiver : number, createAt: string) {
         this.id = id;
         this.message = message;
         this.sender = sender;
         this.receiver = receiver;
+        this.createAt = createAt;
     }
     
     public getId(): number {
@@ -30,6 +32,10 @@ export class MessageDTO{
 
     public getMessage():string {
         return this.message;
+    }
+
+    public getCreateAt(): string {
+        return this.createAt;
     }
 
 }

@@ -1,0 +1,19 @@
+<div *ngIf="userConversations$ | async as conversations">
+    <ul>
+      <li *ngFor="let conversation of conversations">
+        <ul class="messagesDisplay" *ngIf="conversation.getMessages().length > 0">
+          <li *ngFor="let message of conversation.getMessages()" class="messageWrapper"  [ngClass]="{'senderUser' : message.getSender() == userId, 'receiverUser' : message.getReceiver() == userId}">
+            <div class="message"  >
+             <span> {{ message.getMessage() }} </span>
+              <span class="sendTime">
+            
+                {{ message.getCreateAt() }}
+              </span>
+
+            </div>
+
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>

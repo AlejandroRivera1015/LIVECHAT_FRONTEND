@@ -1,0 +1,28 @@
+.message{
+    border: solid 1px var(--secondaryBaseColor);
+}
+
+.messagesDisplay{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+ 
+}
+
+.messagesDisplay .senderUser .message{max-width: 400px; position: absolute; right: 20px; border: var(--mainColor);  background-color: var(--secondaryBaseColor); color: var(--mainColor); border-radius: 20px 20px 0 20px; }
+
+.messagesDisplay .receiverUser .message{max-width: 400px; position: absolute; left: 10px;border: var(--mainColor);   background-color: var(--mainBaseColor); color: var(--textcolor); border-radius: 20px 20px 20px 0px;}
+
+.sendTime{font-size: 10px; position: relative; text-align: right;}
+
+
+@media(min-width:1080px){
+
+    .messagesDisplay li .message{max-width: 400px; width: 100%; padding:20px 10px; font-size: 20px; display: flex; flex-direction: column;}
+    .messagesDisplay{height: 980px; max-height: 920px; overflow: scroll;gap:50px;}
+    .messagesDisplay li div {display: flex;}
+    .messagesDisplay li {margin-bottom: 10px;}
+    .messageWrapper{min-height: 100px; max-width: 300px;}
+
+
+}
