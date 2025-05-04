@@ -28,7 +28,7 @@ export class InputComponent implements OnInit {
   }
 
   handleSendMessage() {
-    console.log("Sending message");
+    
     if (this.sendMessage.value.message != null && this.sendMessage.value.message != "") {
       this.conversationsServices.wsSocket.send(JSON.stringify({
         "message": this.sendMessage.value.message,
