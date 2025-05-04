@@ -9,7 +9,7 @@ export class LivechatUserDTO{
         this.token = token;
     }
 
-    public getId():Number{
+    public getId():number{
         return this.id;
     }
     public getToken():String{
