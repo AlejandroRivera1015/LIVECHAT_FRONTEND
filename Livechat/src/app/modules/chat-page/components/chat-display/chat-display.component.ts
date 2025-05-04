@@ -13,12 +13,12 @@ import { ConversationsDisplayComponent } from './components/conversations-displa
 export class ChatDisplayComponent implements OnInit {
 
   constructor(private conversationServices : ConversationsServicesService, private livechatUserService: LivechatUserService) { }
+
   
 
   ngOnInit(): void {
-
-
       
+
   }
 
 

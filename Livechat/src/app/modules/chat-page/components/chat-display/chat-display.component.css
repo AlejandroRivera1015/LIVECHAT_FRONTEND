@@ -1,0 +1,10 @@
+.middleChatSection{display: flex; width: 100%;}
+.conversationsSection,.messageSection{border: solid 1px var(--mainColor);}
+.mainChatSection{width: 100%;}
+.messageSection{display: flex; flex-direction: column; position:  relative;}
+
+@media(min-width:1080px){
+    .conversationsSection{max-width: 600px; width: 100%;}
+    .messageSection{max-width: 1220px; width: 100%; height: 100%; min-height: 1000px; max-height: 100%;}
+
+}
