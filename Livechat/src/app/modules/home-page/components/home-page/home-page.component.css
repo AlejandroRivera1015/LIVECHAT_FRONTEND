@@ -7,7 +7,7 @@
 
 .loginFormContainer form input[type="submit"]{width: 200px; margin: 0 auto; display: flex; background: transparent; border: white solid 1px ; color: white;}
 
-.loginStatus span{color: var(--mainBaseColor);}
+.loginStatus span{color: var(--textcolor);}
 
 @media (min-width: 1280px) {
 

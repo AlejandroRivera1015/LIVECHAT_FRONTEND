@@ -4,78 +4,104 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { LivechatUserService } from '../../../../services/livechat-user.service';
 import { Router } from '@angular/router';
 import { LivechatUserDTO } from '../../../../DTO/LivechatUserDTO';
-import { filter, map, Observable, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, filter, map, Observable, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-home-page',
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.css'
 })
-export class HomePageComponent implements OnInit , OnDestroy {
+export class HomePageComponent implements OnInit, OnDestroy {
 
-  public loginMessage : String = ""; 
-  private flag : boolean = false;
+  private sessionStatus = new BehaviorSubject<number>(0);
 
-  private  livechatUserServiceObservable : Observable<LivechatUserDTO> = new Observable<LivechatUserDTO>();
+  public loginMessage: String = "";
+  public flag = new BehaviorSubject<boolean>(false);
+  private livechatUserServiceObservable: Observable<LivechatUserDTO> = new Observable<LivechatUserDTO>();
 
   loginForm = new FormGroup({
-    email : new FormControl(''),
-    password : new FormControl('' ,[Validators.required])
+    email: new FormControl(''),
+    password: new FormControl('', [Validators.required])
   });
 
   private destroy$ = new Subject<void>();
 
-  constructor(private livechatUserService : LivechatUserService, private router : Router) {}
+  constructor(private livechatUserService: LivechatUserService, private router: Router) { }
 
 
-  handleloginMessage():void{
-
-    let tempMessage : String  = "" ;
+  public handleloginMessage(): void {
+    let tempMessage: String ;
     this.loginMessage = "";
-    
-    tempMessage = !this.flag ? "Welcome to LiveChat! :D" : "Please, \n try again ! :C";
 
-    setTimeout(()=>{
-        for(let i = 0; i < tempMessage.length; i++){
-          setTimeout(()=>{
-            this.loginMessage = this.loginMessage + tempMessage[i];
-          },i*10);
-        }
-        this.flag = true;
-    },200);
+    if(!this.flag.getValue()){
+       tempMessage = "Welcome to LiveChat! :D";;
+    }    
+    else{
+      tempMessage = "";
+      this.loginMessage = "";
+      if (this.sessionStatus.getValue() == 404) {
+        tempMessage = "Please, \n try again \n user or pswd ! :C";
+      }
 
+      if (this.sessionStatus.getValue() == 500) {
+        tempMessage = "Server  \n unavailable! D:";
+      }
+
+      if (this.sessionStatus.getValue() == 503) {
+        tempMessage = "Please try again later!";
+      }
+
+
+    }
+
+    setTimeout(() => {
+      for (let i = 0; i < tempMessage.length; i++) {
+        setTimeout(() => {
+          this.loginMessage = this.loginMessage + tempMessage[i];
+        }, i * 20);
+      }
+    }, 300);
   }
 
-
   
-  loginformSubmit(){
+  public loginformSubmit() {
 
     try {
-
       this.livechatUserService.requestCredentials(this.loginForm.value).pipe(
         takeUntil(this.destroy$))
-          .subscribe(
-              ((livechatUser : LivechatUserDTO) => {
-                if(livechatUser.getToken() == ""){
-                  this.router.navigate(['/login']);
-                }
-                else{
-                  this.router.navigate(['/app']);
-                }
-              })
-            
-            );
-        
+        .subscribe(
+          ((livechatUser: LivechatUserDTO) => {
+            if (livechatUser.getToken() == "") {
+              this.router.navigate(['/login']);
+            }
+            else {
+              this.router.navigate(['/app']);
+            }
+          })
+
+        );
+
     }
     catch (error) {
-      console.error(error);      
-    }      
-}
+      console.error(error);
+    }
+  }
 
 
   ngOnInit(): void {
-    this.handleloginMessage();
+    this.livechatUserService.sessionHandler.subscribe((sessionStatus: number) => {
+      if (sessionStatus != 200 && sessionStatus != 0) {
+        this.flag.next(true);
+        this.sessionStatus.next(sessionStatus);       
+      }
+    });
+
+    this.flag.subscribe((flag: boolean)=>{
+      this.handleloginMessage();
+    });
   }
+
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
